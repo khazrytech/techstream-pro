@@ -1,0 +1,37 @@
+
+> techstream-pro@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.6 (webpack)
+- Environments: .env.local
+✓ Running next.config.ts took 866ms
+  Skipping creating a lockfile at /data/data/com.termux/files/home/techstream-pro/.next/lock because we're using WASM bindings
+
+  Creating an optimized production build ...
+Failed to compile.
+
+./app/globals.css
+Module not found: Can't resolve 'tailwindcss'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./app/globals.css
+
+./app/globals.css
+Error: Can't resolve 'tailwindcss'
+    at finishWithoutResolve (/data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:191683)
+    at /data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:192583
+    at /data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:193216
+    at eval (eval at create (/data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:14:9222), <anonymous>:16:1)
+    at /data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:193216
+    at eval (eval at create (/data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:14:9222), <anonymous>:27:1)
+    at /data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:175093
+    at /data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:193216
+    at eval (eval at create (/data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:14:9222), <anonymous>:16:1)
+    at /data/data/com.termux/files/home/techstream-pro/node_modules/next/dist/compiled/webpack/bundle5.js:1:208844
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
