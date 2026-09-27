@@ -25,6 +25,185 @@ body {
   width: 100%;
 }
 
+/* Sidebar Styles */
+.sidebar {
+  width: 260px;
+  background: #060a14;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.brand {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  background: #dc2626;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.brand strong {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.brand span {
+  color: #dc2626;
+}
+
+.brand small {
+  font-size: 9px;
+  color: #71717a;
+}
+
+.sidebar-label {
+  padding: 20px 20px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #52525b;
+  letter-spacing: 1px;
+}
+
+.sidebar-nav {
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-nav button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: #a1a1aa;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.sidebar-nav button:hover,
+.sidebar-nav button.active {
+  background: rgba(220, 38, 38, 0.1);
+  color: #ffffff;
+}
+
+.sidebar-nav button.active .sidebar-icon {
+  color: #dc2626;
+}
+
+.sidebar-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.nav-count {
+  margin-left: auto;
+  font-size: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: #d4d4d8;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.upgrade-card {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(0, 0, 0, 0.4));
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.upgrade-icon {
+  font-size: 14px;
+  color: #dc2626;
+  margin-bottom: 6px;
+}
+
+.upgrade-card strong {
+  display: block;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.upgrade-card p {
+  font-size: 9px;
+  color: #a1a1aa;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.upgrade-card button {
+  width: 100%;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.sidebar-profile .avatar {
+  width: 32px;
+  height: 32px;
+  background: #27272a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.sidebar-profile strong {
+  display: block;
+  font-size: 11px;
+}
+
+.sidebar-profile small {
+  font-size: 9px;
+  color: #71717a;
+}
+
 @media (max-width: 768px) {
   .app {
     flex-direction: column;
