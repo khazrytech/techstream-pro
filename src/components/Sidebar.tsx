@@ -1,6 +1,6 @@
 export default function Sidebar() {
   return (
-    <aside className="sidebar hidden md:block">
+    <aside className="sidebar block">
       <div className="brand">
         <div className="brand-mark">T</div>
         <div>
