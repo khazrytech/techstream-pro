@@ -1,69 +1,185 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useEffect, useState } from "react";
+import { Play, Search, Bell, User, Tv, Film, Clapperboard, X } from "lucide-react";
+import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase Setup
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "WEKA_URL_YAKO_HAPA";
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "WEKA_KEY_YAKO_HAPA";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+export default function HomePage() {
+  const [channels, setChannels] = useState<any[]>([]);
+  const [movies, setMovies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // State ya Modal ya Notifications
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data: chData } = await supabase.from("channels").select("*").eq("is_active", true);
+        const { data: mvData } = await supabase.from("movies").select("*");
+        if (chData) setChannels(chData);
+        if (mvData) setMovies(mvData);
+      } catch (err) {
+        console.error("Error fetching database:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-[#060a14] text-white pb-28 font-sans selection:bg-blue-600">
+      {/* Top Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#060a14]/95 sticky top-0 z-40 backdrop-blur-md border-b border-slate-800/60">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
+            <Play size={16} fill="white" className="text-white ml-0.5" />
+          </div>
+          <span className="font-black text-sm tracking-wider text-white">TECHSTREAM</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex items-center gap-3">
+          <Link href="/settings" className="w-9 h-9 bg-slate-900 border border-slate-800 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition">
+            <User size={18} />
+          </Link>
         </div>
-      </main>
+      </div>
+
+      {/* Search Bar & Notifications (Pembeni ya Search) */}
+      <div className="px-4 mt-4 flex items-center gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+          <input 
+            type="text" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tafuta chaneli au filamu..." 
+            className="w-full bg-[#0f172a] border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition"
+          />
+        </div>
+        
+        {/* Kitufe cha Notifications Kimekaa Hapa Kulia */}
+        <button 
+          onClick={() => setShowNotifications(true)}
+          className="w-[46px] h-[46px] bg-[#0f172a] border border-slate-800 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition relative shrink-0 shadow-sm"
+        >
+          <Bell size={18} />
+          <span className="absolute top-3 right-3 w-2 h-2 bg-red-600 rounded-full animate-pulse border border-[#0f172a]"></span>
+        </button>
+      </div>
+
+      {/* Live Channels Section */}
+      <div className="mt-6 px-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <Tv size={16} className="text-blue-500" /> Live Channels
+          </h3>
+          <span className="text-xs text-blue-400 font-semibold cursor-pointer">Tazama Zote</span>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-10 text-xs text-slate-400 flex flex-col items-center justify-center gap-2">
+            <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            Inapakia...
+          </div>
+        ) : channels.length === 0 ? (
+          <div className="bg-[#0f172a] border border-slate-800 p-5 rounded-2xl text-center space-y-2">
+            <p className="text-xs font-bold text-white">Hakuna chaneli bado.</p>
+          </div>
+        ) : (
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {channels.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())).map((ch, idx) => (
+              <div key={idx} className="flex-shrink-0 w-32 space-y-2 group cursor-pointer">
+                <div className="w-full h-40 bg-[#0f172a] border border-slate-800 rounded-2xl p-3 flex flex-col justify-between relative group-hover:border-blue-500 transition shadow-md">
+                  <span className="absolute top-2 left-2 bg-red-600 px-1.5 py-0.5 rounded text-[8px] font-bold text-white">LIVE</span>
+                  <div className="my-auto flex items-center justify-center">
+                    <Tv size={30} className="text-slate-500 group-hover:text-blue-400 transition" />
+                  </div>
+                  <span className="text-[10px] text-slate-400 text-center bg-slate-900 py-1 rounded-lg">HD Stream</span>
+                </div>
+                <h4 className="text-xs font-bold truncate text-white">{ch.name}</h4>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Movies Section */}
+      <div className="mt-6 px-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-sm text-white flex items-center gap-2">
+            <Film size={16} className="text-purple-500" /> Movies & Series
+          </h3>
+        </div>
+        {movies.length === 0 ? (
+          <div className="bg-[#0f172a] border border-slate-800 p-4 rounded-2xl text-center text-xs text-slate-400">
+            Hakuna filamu bado.
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {movies.map((m, idx) => (
+              <div key={idx} className="bg-[#0f172a] border border-slate-800 p-2.5 rounded-2xl space-y-2">
+                <div className="w-full h-40 bg-slate-800 rounded-xl flex items-center justify-center text-slate-500">
+                  <Clapperboard size={24} />
+                </div>
+                <h4 className="text-xs font-bold truncate text-white">{m.title}</h4>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* MODAL YA NOTIFICATIONS (Inafunguka hapa hapa Home) */}
+      {showNotifications && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-zinc-950 border border-zinc-800 w-full max-w-md rounded-3xl p-5 space-y-4 shadow-2xl relative">
+            <button 
+              onClick={() => setShowNotifications(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-white bg-zinc-900 p-1.5 rounded-full transition"
+            >
+              <X size={16} />
+            </button>
+            <h3 className="font-black text-sm text-white flex items-center gap-2">
+              <Bell size={16} className="text-red-500" /> Arifa Mpya
+            </h3>
+            
+            <div className="space-y-3 mt-4 max-h-[60vh] overflow-y-auto">
+              {/* Mfano wa Notification 1 */}
+              <div className="bg-zinc-900/80 border border-zinc-800 p-3.5 rounded-2xl space-y-1 hover:border-zinc-700 transition cursor-pointer">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-bold text-xs text-white">New Live Stream</h4>
+                  <span className="text-[9px] text-zinc-500">Muda huu</span>
+                </div>
+                <p className="text-[11px] text-zinc-400">Azam Sports HD imewashwa sasa hivi. Ingia utazame mechi mubashara.</p>
+              </div>
+
+              {/* Mfano wa Notification 2 */}
+              <div className="bg-zinc-900/80 border border-zinc-800 p-3.5 rounded-2xl space-y-1 hover:border-zinc-700 transition cursor-pointer">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-bold text-xs text-white">Subscription Alert</h4>
+                  <span className="text-[9px] text-zinc-500">Saa 2 zilizopita</span>
+                </div>
+                <p className="text-[11px] text-zinc-400">Jaribu kifurushi chetu cha 4K bure kwa siku 3. Usipitwe!</p>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setShowNotifications(false)}
+              className="w-full bg-zinc-800 hover:bg-zinc-700 py-3 rounded-xl text-xs font-bold text-white mt-2 transition"
+            >
+              Funga
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
