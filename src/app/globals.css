@@ -228,3 +228,14 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #dc2626;
 }
+
+/* Hakikisha Sidebar inaonekana kwenye simu na PC kwa mpangilio safi */
+@media (max-width: 768px) {
+  .sidebar {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+    height: auto !important;
+  }
+}
