@@ -8,6 +8,8 @@ export default function Home() {
   const [activeStream, setActiveStream] = useState("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
   const [activeTitle, setActiveTitle] = useState("Chaneli ya Majaribio");
 
+
+
   // Orodha ya muda ya muonekano (Tutaivuta kutoka Supabase kwenye hatua ijayo)
   const mockChannels = [
     { id: "1", name: "Azam Sports 1 HD", category: "Michezo", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
@@ -17,7 +19,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="p-4 space-y-6 pb-[110px] md:pb-[70px]">
+    <div className="p-4 space-y-6">
       {/* Sehemu ya Video Player (Juu) */}
       <section className="space-y-3">
         <div className="flex items-center space-x-2">
