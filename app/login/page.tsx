@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
 import {
   Eye,
   EyeOff,
@@ -21,6 +22,11 @@ import {
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const supabase = createClient();
 
   return (
     <main className="login-page">
@@ -155,12 +161,51 @@ export default function LoginPage() {
             </div>
 
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                console.log("Login submitted");
+                setLoading(true);
+                setMessage("");
+
+                const value = identifier.trim();
+
+                const credentials = value.includes("@")
+                  ? {
+                      email: value,
+                      password,
+                    }
+                  : {
+                      phone: value,
+                      password,
+                    };
+
+                const { error } =
+                  await supabase.auth.signInWithPassword(
+                    credentials
+                  );
+
+                if (error) {
+                  setMessage(error.message);
+                  setLoading(false);
+                  return;
+                }
+
+                const params =
+                  new URLSearchParams(
+                    window.location.search
+                  );
+
+                const next = params.get("next");
+
+                const safeNext =
+                  next &&
+                  next.startsWith("/") &&
+                  !next.startsWith("//")
+                    ? next
+                    : "/";
+
+                window.location.replace(safeNext);
               }}
             >
-              {/* Email */}
               <div className="input-group">
                 <UserRound size={20} />
 
@@ -168,29 +213,37 @@ export default function LoginPage() {
                   type="text"
                   placeholder="Email or Phone Number"
                   autoComplete="username"
+                  value={identifier}
+                  onChange={(e) =>
+                    setIdentifier(e.target.value)
+                  }
                   required
                 />
               </div>
 
-              {/* Password */}
               <div className="input-group">
                 <LockKeyhole size={20} />
 
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
                   placeholder="Password"
                   autoComplete="current-password"
+                  value={password}
+                  onChange={(e) =>
+                    setPassword(e.target.value)
+                  }
                   required
                 />
 
                 <button
                   type="button"
                   className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
+                  onClick={() =>
+                    setShowPassword(!showPassword)
                   }
                 >
                   {showPassword ? (
@@ -201,7 +254,25 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              {/* Remember / Forgot */}
+              {message && (
+                <div
+                  style={{
+                    margin: "10px 0",
+                    padding: "10px 12px",
+                    borderRadius: "10px",
+                    color: "#ff9dad",
+                    background:
+                      "rgba(255,55,85,.1)",
+                    border:
+                      "1px solid rgba(255,55,85,.25)",
+                    fontSize: "12px",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {message}
+                </div>
+              )}
+
               <div className="login-options">
                 <label className="remember">
                   <input
@@ -224,37 +295,23 @@ export default function LoginPage() {
                 </a>
               </div>
 
-              {/* Login */}
-              <button className="login-button" type="submit">
-                <span>Login</span>
+              <button
+                className="login-button"
+                type="submit"
+                disabled={loading}
+                style={{
+                  opacity: loading ? 0.65 : 1,
+                }}
+              >
+                <span>
+                  {loading
+                    ? "Signing in..."
+                    : "Login"}
+                </span>
+
                 <ArrowRight size={21} />
               </button>
             </form>
-
-            {/* Divider */}
-            <div className="divider">
-              <span />
-              <p>or continue with</p>
-              <span />
-            </div>
-
-            {/* Social login */}
-            <div className="social-login">
-              <button type="button">
-                <span className="google">G</span>
-                Google
-              </button>
-
-              <button type="button">
-                <span className="facebook">f</span>
-                Facebook
-              </button>
-
-              <button type="button">
-                <span className="apple">●</span>
-                Apple
-              </button>
-            </div>
 
             <div className="signup-mobile">
               Don't have an account?
