@@ -1,7 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
 
-// Tunaweka fallback yenye mfumo wa link halisi ili Next.js isigome wakati wa Build
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://mfano.supabase.co';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'mfano_key';
+const supabaseUrl = 'https://fqixivwvmtggpuftrnxxq.supabase.co'
+const supabaseKey = 'sb_publishable_VhSD2Thx5qKL383FRa1t3Q_xmICS0S1'
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey)
