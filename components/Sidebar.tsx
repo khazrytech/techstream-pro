@@ -15,7 +15,7 @@ export default function Sidebar() {
   const [active, setActive] = useState("Nyumbani");
 
   return (
-    <aside className="sidebar">
+    <aside className="hidden md:block sidebar">
       <div className="brand">
         <div className="brand-mark">T</div>
 
